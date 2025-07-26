@@ -13,6 +13,24 @@
         <div class="nav-section">
           <div class="nav-title">Home</div>
           <q-list dense>
+            <q-item clickable v-ripple class="nav-item" to="/courses">
+              <q-item-section avatar>
+                <q-icon name="library_books" />
+              </q-item-section>
+              <q-item-section>課程列表</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple class="nav-item" to="/dashboard">
+              <q-item-section avatar>
+                <q-icon name="dashboard" />
+              </q-item-section>
+              <q-item-section>學習儀表板</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple class="nav-item" to="/auth">
+              <q-item-section avatar>
+                <q-icon name="account_circle" />
+              </q-item-section>
+              <q-item-section>登入/註冊</q-item-section>
+            </q-item>
             <q-item clickable v-ripple class="nav-item" to="/" exact>
               <q-item-section avatar>
                 <q-icon name="home" />
