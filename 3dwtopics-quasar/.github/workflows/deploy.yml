@@ -1,0 +1,42 @@
+name: Build Quasar App
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '3dwtopics-quasar/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '3dwtopics-quasar/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: '3dwtopics-quasar/package-lock.json'
+
+      - name: Install dependencies
+        run: |
+          cd 3dwtopics-quasar
+          npm ci
+
+      - name: Build Quasar app
+        run: |
+          cd 3dwtopics-quasar
+          npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: quasar-build
+          path: 3dwtopics-quasar/dist 

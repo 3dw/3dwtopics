@@ -1,0 +1,42 @@
+name: Build Astro Site
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '3dwtopics-astro/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '3dwtopics-astro/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: '3dwtopics-astro/package-lock.json'
+
+      - name: Install dependencies
+        run: |
+          cd 3dwtopics-astro
+          npm ci
+
+      - name: Build Astro site
+        run: |
+          cd 3dwtopics-astro
+          npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: astro-build
+          path: 3dwtopics-astro/dist 

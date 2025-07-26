@@ -6,11 +6,16 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "deploy": "npm run build && wrangler pages deploy dist",
+    "deploy:preview": "npm run build && wrangler pages deploy dist --branch=preview"
   },
   "dependencies": {
     "astro": "^5.12.3",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.5"
+  },
+  "devDependencies": {
+    "wrangler": "^4.26.0"
   }
 }
