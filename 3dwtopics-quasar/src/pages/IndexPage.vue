@@ -23,7 +23,7 @@
         <div class="row items-center q-pa-xl">
           <div class="col-12 col-md-6">
             <h1 class="text-h2 text-weight-bold text-white q-mb-md">
-              歡迎來到 3dw 線上課程平台
+              歡迎來到quasar 3dw 線上課程平台
             </h1>
             <p class="text-h6 text-white-7 q-mb-lg">
               探索自主學習的無限可能，透過我們的線上課程平台，建立你的學習旅程
