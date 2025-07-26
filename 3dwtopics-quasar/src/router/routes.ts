@@ -33,6 +33,13 @@ const routes: RouteRecordRaw[] = [
       { path: 'tid', component: () => import('pages/TidPage.vue') },
       { path: 'record-key', component: () => import('pages/RecordKeyPage.vue') },
       { path: 'uri-scheme', component: () => import('pages/UriSchemePage.vue') },
+      
+      // 線上課程平台路由
+      { path: 'auth', component: () => import('pages/AuthPage.vue') },
+      { path: 'courses', component: () => import('pages/CoursesPage.vue') },
+      { path: 'course/:id', component: () => import('pages/CourseDetailPage.vue') },
+      { path: 'dashboard', component: () => import('pages/DashboardPage.vue') },
+      { path: 'learn/:id', component: () => import('pages/LearnPage.vue') },
     ],
   },
 
