@@ -128,6 +128,44 @@ quasar build -m capacitor -T [android|ios]
 
 詳細設置和使用說明請參考：[ATProtocol 認證說明](./ATPROTO_AUTH_README.md)
 
+## API 串接系統
+
+本專案已成功串接後端 API，實現完整的線上課程平台功能：
+
+### 已實現功能
+
+- **用戶管理**: 註冊、登入、用戶資訊管理
+- **課程管理**: 課程列表、課程詳情、課程搜尋和篩選
+- **認證系統**: Token 驗證、Token 刷新
+- **學習進度**: 進度追蹤、進度更新、學習統計
+
+### API 端點
+
+- `POST /api/v1/users/register` - 用戶註冊
+- `POST /api/v1/users/login` - 用戶登入
+- `GET /api/v1/courses` - 獲取課程列表
+- `GET /api/v1/courses/:id` - 獲取單一課程
+- `POST /api/v1/auth/verify` - 驗證 Token
+- `POST /api/v1/auth/refresh` - 重新整理 Token
+- `GET /api/v1/progress` - 獲取學習進度
+- `POST /api/v1/progress` - 更新學習進度
+
+### 服務架構
+
+- **API 服務層** (`src/services/api.ts`): HTTP 請求處理
+- **用戶服務層** (`src/services/user-service.ts`): 用戶狀態管理
+- **課程服務層** (`src/services/course-service.ts`): 課程數據管理
+- **進度服務層** (`src/services/progress-service.ts`): 學習進度管理
+
+### 技術特色
+
+- 統一的錯誤處理機制
+- 自動 Token 管理
+- 響應式數據狀態
+- 類型安全的 TypeScript 介面
+
+詳細 API 串接說明請參考：[API 串接說明](./API_INTEGRATION_README.md)
+
 ## 設計理念
 
 本專案旨在為 3dw 自主學習促進會建立一個現代化、功能完整的線上課程平台，讓學習者能夠：

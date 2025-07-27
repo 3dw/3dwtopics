@@ -58,7 +58,7 @@
             @click="viewCourse(course)"
           >
             <div class="course-image">
-              <img :src="course.image" :alt="course.title" />
+              <img :src="course.image || '/images/explore.jpg'" :alt="course.title" />
               <div class="course-overlay">
                 <q-btn
                   color="primary"
@@ -77,30 +77,27 @@
               <div class="course-meta">
                 <div class="meta-item">
                   <q-icon name="schedule" size="16px" />
-                  <span>{{ course.duration }}</span>
+                  <span>{{ course.duration }} 小時</span>
                 </div>
                 <div class="meta-item">
                   <q-icon name="school" size="16px" />
-                  <span>{{ course.level }}</span>
+                  <span>{{ course.difficulty }}</span>
                 </div>
                 <div class="meta-item">
                   <q-icon name="people" size="16px" />
-                  <span>{{ course.students }} 學員</span>
+                  <span>{{ course.instructor }}</span>
                 </div>
               </div>
 
               <div class="course-footer">
                 <div class="course-price">
-                  <span class="price">NT$ {{ course.price }}</span>
-                  <span v-if="course.originalPrice" class="original-price">
-                    NT$ {{ course.originalPrice }}
-                  </span>
+                  <span class="price">免費</span>
                 </div>
                 <q-btn
                   color="primary"
-                  label="立即購買"
+                  label="開始學習"
                   size="sm"
-                  @click.stop="purchaseCourse(course)"
+                  @click.stop="viewCourse(course)"
                 />
               </div>
             </div>
@@ -112,9 +109,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
+import { courseService } from '../services/course-service'
 
 const router = useRouter()
 const $q = useQuasar()
@@ -140,123 +138,33 @@ const levels = [
   '專家'
 ]
 
-const courses = ref([
-  {
-    id: 1,
-    title: '野外可食植物辨識',
-    description: '學習辨識野地可食植物，掌握安全採集原則與生態倫理',
-    category: '野外生態',
-    level: '初學者',
-    duration: '8 小時',
-    students: 156,
-    price: 1200,
-    originalPrice: 1500,
-    image: '/images/reiver1.jpg'
-  },
-  {
-    id: 2,
-    title: '地景生態觀察',
-    description: '探索區域生態與植物群落，理解入侵種意義，培養生態倫理',
-    category: '野外生態',
-    level: '進階',
-    duration: '12 小時',
-    students: 89,
-    price: 1800,
-    originalPrice: 2200,
-    image: '/images/watch1.jpg'
-  },
-  {
-    id: 3,
-    title: '生態記錄與分享',
-    description: '學習使用開放工具進行生態記錄，建立公民科學參與',
-    category: '野外生態',
-    level: '進階',
-    duration: '6 小時',
-    students: 67,
-    price: 900,
-    originalPrice: 1200,
-    image: '/images/explore.jpg'
-  },
-  {
-    id: 4,
-    title: '批判性思維訓練',
-    description: '培養批判性思維，學習邏輯推理與論證技巧',
-    category: '思辨主題',
-    level: '初學者',
-    duration: '10 小時',
-    students: 234,
-    price: 1500,
-    originalPrice: null,
-    image: '/images/reiver1.jpg'
-  },
-  {
-    id: 5,
-    title: '數學思維與應用',
-    description: '探索數學的奧秘，從基礎運算到高等數學',
-    category: '數學主題',
-    level: '進階',
-    duration: '16 小時',
-    students: 178,
-    price: 2000,
-    originalPrice: 2500,
-    image: '/images/watch1.jpg'
-  },
-  {
-    id: 6,
-    title: '創意寫作技巧',
-    description: '提升寫作技巧，從創意寫作到學術寫作',
-    category: '寫作主題',
-    level: '初學者',
-    duration: '8 小時',
-    students: 145,
-    price: 1200,
-    originalPrice: null,
-    image: '/images/explore.jpg'
+// 載入課程數據
+onMounted(async () => {
+  const result = await courseService.getCourses()
+  if (!result.success) {
+    $q.notify({
+      type: 'negative',
+      message: result.message
+    })
   }
-])
+})
 
 const filteredCourses = computed(() => {
-  return courses.value.filter(course => {
-    const matchesSearch = course.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-                         course.description.toLowerCase().includes(searchQuery.value.toLowerCase())
+  return courseService.searchCourses(searchQuery.value).filter(course => {
     const matchesCategory = selectedCategory.value === '全部' || course.category === selectedCategory.value
-    const matchesLevel = selectedLevel.value === '全部' || course.level === selectedLevel.value
+    const matchesLevel = selectedLevel.value === '全部' || course.difficulty === selectedLevel.value
     
-    return matchesSearch && matchesCategory && matchesLevel
+    return matchesCategory && matchesLevel
   })
 })
 
-interface Course {
-  id: number
-  title: string
-  description: string
-  category: string
-  level: string
-  duration: string
-  students: number
-  price: number
-  originalPrice: number | null
-  image: string
-}
+import type { Course } from '../services/api'
 
 const viewCourse = async (course: Course) => {
   await router.push(`/course/${course.id}`)
 }
 
-const purchaseCourse = (course: Course) => {
-  $q.dialog({
-    title: '確認購買',
-    message: `確定要購買「${course.title}」課程嗎？`,
-    cancel: true,
-    persistent: true
-  }).onOk(() => {
-    $q.notify({
-      type: 'positive',
-      message: '購買成功！課程已加入您的學習清單'
-    })
-    void router.push('/dashboard')
-  })
-}
+// 移除購買功能，改為直接查看課程
 </script>
 
 <style scoped>

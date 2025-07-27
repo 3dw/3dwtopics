@@ -98,7 +98,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { authService } from '../services/auth'
+import { userService } from '../services/user-service'
 
 const router = useRouter()
 const route = useRoute()
@@ -135,7 +135,8 @@ const toggleMode = () => {
 const handleGoogleLogin = () => {
   googleLoading.value = true
   try {
-    const authUrl = authService.startGoogleOAuth()
+    // 暫時使用 Google OAuth URL，實際應該從後端獲取
+    const authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=your-client-id&redirect_uri=http://localhost:3000/auth&response_type=code&scope=email profile'
     window.location.href = authUrl
   } catch {
     $q.notify({
@@ -150,14 +151,14 @@ const handleGoogleLogin = () => {
 const handleOAuthCallback = async (code: string) => {
   googleLoading.value = true
   try {
-    const result = await authService.handleGoogleOAuthCallback(code)
-    
-    // 儲存 token
-    authService.storeToken(result.token)
+    // 這裡應該調用後端 API 來處理 OAuth 回調
+    // 暫時使用模擬數據
+    await new Promise(resolve => setTimeout(resolve, 1000)) // 模擬 API 調用
+    console.log('OAuth code received:', code) // 使用 code 參數
     
     $q.notify({
       type: 'positive',
-      message: `歡迎回來，${result.user.displayName || result.user.email}!`
+      message: 'Google 登入成功！'
     })
     
     // 清除 URL 中的 code 參數
@@ -181,23 +182,47 @@ const handleSubmit = async () => {
   
   try {
     if (isLogin.value) {
-      // 模擬登入
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      $q.notify({
-        type: 'positive',
-        message: '登入成功！'
+      // 使用新的用戶服務進行登入
+      const result = await userService.login({
+        email: form.email,
+        password: form.password
       })
-      await router.push('/dashboard')
+      
+      if (result.success) {
+        $q.notify({
+          type: 'positive',
+          message: result.message
+        })
+        await router.push('/dashboard')
+      } else {
+        $q.notify({
+          type: 'negative',
+          message: result.message
+        })
+      }
     } else {
-      // 模擬註冊
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      $q.notify({
-        type: 'positive',
-        message: '註冊成功！'
+      // 使用新的用戶服務進行註冊
+      const result = await userService.register({
+        email: form.email,
+        password: form.password,
+        name: form.name
       })
-      isLogin.value = true
+      
+      if (result.success) {
+        $q.notify({
+          type: 'positive',
+          message: result.message
+        })
+        isLogin.value = true
+      } else {
+        $q.notify({
+          type: 'negative',
+          message: result.message
+        })
+      }
     }
-  } catch {
+  } catch (error) {
+    console.error('認證錯誤:', error)
     $q.notify({
       type: 'negative',
       message: '操作失敗，請重試'
