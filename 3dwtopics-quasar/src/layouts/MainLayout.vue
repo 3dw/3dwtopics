@@ -11,7 +11,7 @@
       
       <nav class="sidebar-nav">
         <div class="nav-section">
-          <div class="nav-title">Home</div>
+          <div class="nav-title">自主學習促進會線上課程平台</div>
           <q-list dense>
             <q-item clickable v-ripple class="nav-item" to="/courses">
               <q-item-section avatar>
@@ -57,8 +57,37 @@
             </q-item>
           </q-list>
         </div>
-
         <div class="nav-section">
+          <div class="nav-title">Guides</div>
+          <q-list dense>
+            
+            <q-item clickable v-ripple class="nav-item" to="/identity">
+              <q-item-section avatar>
+                <q-icon name="person" />
+              </q-item-section>
+              <q-item-section>Identity</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple class="nav-item" to="/data-repositories">
+              <q-item-section avatar>
+                <q-icon name="storage" />
+              </q-item-section>
+              <q-item-section>Data Repositories</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple class="nav-item" to="/schemas-lexicon">
+              <q-item-section avatar>
+                <q-icon name="schema" />
+              </q-item-section>
+              <q-item-section>Schemas & Lexicon</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple class="nav-item" to="/pds-self-hosting">
+              <q-item-section avatar>
+                <q-icon name="dns" />
+              </q-item-section>
+              <q-item-section>PDS Self-Hosting</q-item-section>
+            </q-item>
+          </q-list>
+        </div>
+        <!-- <div class="nav-section">
           <div class="nav-title">線上課程平台</div>
           <q-list dense>
             <q-item clickable v-ripple class="nav-item" to="/courses">
@@ -242,7 +271,7 @@
               <q-item-section>URI Scheme</q-item-section>
             </q-item>
           </q-list>
-        </div>
+        </div> -->
       </nav>
     </div>
 
