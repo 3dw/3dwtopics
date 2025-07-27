@@ -198,6 +198,31 @@
       font-weight: 600;
       margin-bottom: 1rem;
     }
+    
+    /* 手機版樣式調整 */
+    @media only screen and (max-width: 768px) {
+      /* 增加選單高度 */
+      .ui.fixed.inverted.menu {
+        min-height: 70px !important;
+        padding: 0.8rem 0;
+      }
+      
+      .ui.fixed.inverted.menu .item {
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+      }
+      
+      /* 減少上方空白 */
+      .hero-section {
+        padding: 80px 0 60px;
+        margin-top: 0;
+      }
+      
+      .martial-arts-title {
+        font-size: 2.2rem;
+        margin-top: 0;
+      }
+    }
   </style>
 	</head>
 	<body>
