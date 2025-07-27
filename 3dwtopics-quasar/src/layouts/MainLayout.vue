@@ -296,10 +296,11 @@
           </q-input>
         </div>
         <div class="nav-right">
-          <q-btn flat label="SDKs" />
+          <!-- <q-btn flat label="SDKs" /> -->
           <q-btn flat label="Blog" />
           <q-btn flat label="GitHub" />
           <q-btn flat label="English" />
+          <q-btn flat label="Atprotocol登入/註冊" />
         </div>
       </div>
 

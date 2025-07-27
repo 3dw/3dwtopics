@@ -187,7 +187,7 @@ const courses = ref([
     students: 234,
     price: 1500,
     originalPrice: null,
-    image: '/images/thinking.jpg'
+    image: '/images/reiver1.jpg'
   },
   {
     id: 5,
@@ -199,7 +199,7 @@ const courses = ref([
     students: 178,
     price: 2000,
     originalPrice: 2500,
-    image: '/images/math.jpg'
+    image: '/images/watch1.jpg'
   },
   {
     id: 6,
@@ -211,7 +211,7 @@ const courses = ref([
     students: 145,
     price: 1200,
     originalPrice: null,
-    image: '/images/writing.jpg'
+    image: '/images/explore.jpg'
   }
 ])
 
