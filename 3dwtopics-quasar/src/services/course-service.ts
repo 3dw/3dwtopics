@@ -47,8 +47,8 @@ export class CourseService {
   }
 
   // 根據難度篩選課程
-  getCoursesByDifficulty(difficulty: Course['difficulty']): Course[] {
-    return courses.value.filter(course => course.difficulty === difficulty)
+  getCoursesByLevel(level: Course['level']): Course[] {
+    return courses.value.filter(course => course.level === level)
   }
 
   // 根據類別篩選課程
@@ -69,9 +69,9 @@ export class CourseService {
   // 獲取課程統計
   getCourseStats() {
     const total = courses.value.length
-    const beginner = courses.value.filter(c => c.difficulty === 'beginner').length
-    const intermediate = courses.value.filter(c => c.difficulty === 'intermediate').length
-    const advanced = courses.value.filter(c => c.difficulty === 'advanced').length
+    const beginner = courses.value.filter(c => c.level === 'beginner').length
+    const intermediate = courses.value.filter(c => c.level === 'intermediate').length
+    const advanced = courses.value.filter(c => c.level === 'advanced').length
 
     return {
       total,

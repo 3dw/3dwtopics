@@ -50,55 +50,75 @@
     <!-- 課程列表 -->
     <div class="courses-section">
       <div class="container">
-        <div class="courses-grid">
-          <div
-            v-for="course in filteredCourses"
-            :key="course.id"
-            class="course-card"
-            @click="viewCourse(course)"
-          >
-            <div class="course-image">
-              <img :src="course.image || '/images/explore.jpg'" :alt="course.title" />
-              <div class="course-overlay">
-                <q-btn
-                  color="primary"
-                  label="查看詳情"
-                  size="sm"
-                  class="view-btn"
-                />
-              </div>
-            </div>
-            
-            <div class="course-content">
-              <div class="course-category">{{ course.category }}</div>
-              <h3 class="course-title">{{ course.title }}</h3>
-              <p class="course-description">{{ course.description }}</p>
-              
-              <div class="course-meta">
-                <div class="meta-item">
-                  <q-icon name="schedule" size="16px" />
-                  <span>{{ course.duration }} 小時</span>
-                </div>
-                <div class="meta-item">
-                  <q-icon name="school" size="16px" />
-                  <span>{{ course.difficulty }}</span>
-                </div>
-                <div class="meta-item">
-                  <q-icon name="people" size="16px" />
-                  <span>{{ course.instructor }}</span>
-                </div>
-              </div>
+        <!-- 載入狀態 -->
+        <div v-if="isLoading" class="loading-section">
+          <q-spinner-dots size="50px" color="primary" />
+          <p>載入課程中...</p>
+        </div>
 
-              <div class="course-footer">
-                <div class="course-price">
-                  <span class="price">免費</span>
+        <!-- 錯誤狀態 -->
+        <div v-else-if="error" class="error-section">
+          <q-icon name="error" size="50px" color="negative" />
+          <p>{{ error }}</p>
+          <q-btn color="primary" label="重試" @click="loadCourses" />
+        </div>
+
+        <!-- 課程列表 -->
+        <div v-else>
+          <div class="courses-header">
+            <h2>找到 {{ filteredCourses.length }} 個課程</h2>
+          </div>
+          
+          <div class="courses-grid">
+            <div
+              v-for="course in filteredCourses"
+              :key="course.id"
+              class="course-card"
+              @click="viewCourse(course)"
+            >
+              <div class="course-image">
+                <img :src="course.thumbnail || '/images/explore.jpg'" :alt="course.title" />
+                <div class="course-overlay">
+                  <q-btn
+                    color="primary"
+                    label="查看詳情"
+                    size="sm"
+                    class="view-btn"
+                  />
                 </div>
-                <q-btn
-                  color="primary"
-                  label="開始學習"
-                  size="sm"
-                  @click.stop="viewCourse(course)"
-                />
+              </div>
+              
+              <div class="course-content">
+                <div class="course-category">{{ course.category }}</div>
+                <h3 class="course-title">{{ course.title }}</h3>
+                <p class="course-description">{{ course.description }}</p>
+                
+                <div class="course-meta">
+                  <div class="meta-item">
+                    <q-icon name="schedule" size="16px" />
+                    <span>{{ course.duration }} 分鐘</span>
+                  </div>
+                  <div class="meta-item">
+                    <q-icon name="school" size="16px" />
+                    <span>{{ getLevelText(course.level) }}</span>
+                  </div>
+                  <div class="meta-item">
+                    <q-icon name="people" size="16px" />
+                    <span>{{ course.instructor }}</span>
+                  </div>
+                </div>
+
+                <div class="course-footer">
+                  <div class="course-price">
+                    <span class="price">{{ course.price === 0 ? '免費' : `NT$ ${course.price}` }}</span>
+                  </div>
+                  <q-btn
+                    color="primary"
+                    label="開始學習"
+                    size="sm"
+                    @click.stop="viewCourse(course)"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -120,39 +140,62 @@ const $q = useQuasar()
 const searchQuery = ref('')
 const selectedCategory = ref('全部')
 const selectedLevel = ref('全部')
+const isLoading = ref(false)
+const error = ref('')
 
 const categories = [
   '全部',
-  '野外生態',
-  '思辨主題',
-  '數學主題',
-  '寫作主題',
-  '公共參與',
-  '自學煩惱'
+  'general'
 ]
 
 const levels = [
   '全部',
-  '初學者',
-  '進階',
-  '專家'
+  'beginner',
+  'intermediate',
+  'advanced'
 ]
 
 // 載入課程數據
-onMounted(async () => {
-  const result = await courseService.getCourses()
-  if (!result.success) {
-    $q.notify({
-      type: 'negative',
-      message: result.message
-    })
+const loadCourses = async () => {
+  isLoading.value = true
+  error.value = ''
+  
+  try {
+    const result = await courseService.getCourses()
+    if (!result.success) {
+      error.value = result.message
+      $q.notify({
+        type: 'negative',
+        message: result.message
+      })
+    }
+  } catch (err) {
+    error.value = '載入課程失敗，請稍後再試'
+    console.error('載入課程錯誤:', err)
+  } finally {
+    isLoading.value = false
   }
+}
+
+// 載入課程數據
+onMounted(() => {
+  void loadCourses()
 })
+
+// 等級文字轉換函數
+const getLevelText = (level: string) => {
+  const levelMap: Record<string, string> = {
+    'beginner': '初學者',
+    'intermediate': '進階',
+    'advanced': '專家'
+  }
+  return levelMap[level] || level
+}
 
 const filteredCourses = computed(() => {
   return courseService.searchCourses(searchQuery.value).filter(course => {
     const matchesCategory = selectedCategory.value === '全部' || course.category === selectedCategory.value
-    const matchesLevel = selectedLevel.value === '全部' || course.difficulty === selectedLevel.value
+    const matchesLevel = selectedLevel.value === '全部' || course.level === selectedLevel.value
     
     return matchesCategory && matchesLevel
   })
@@ -228,6 +271,34 @@ const viewCourse = async (course: Course) => {
 
 .courses-section {
   padding: 60px 0;
+}
+
+.loading-section,
+.error-section {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.loading-section p,
+.error-section p {
+  margin-top: 16px;
+  color: #666;
+  font-size: 16px;
+}
+
+.error-section .q-btn {
+  margin-top: 20px;
+}
+
+.courses-header {
+  margin-bottom: 30px;
+}
+
+.courses-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
 }
 
 .courses-grid {

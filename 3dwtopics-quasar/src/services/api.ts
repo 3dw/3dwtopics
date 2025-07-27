@@ -45,11 +45,14 @@ export interface Course {
   id: string
   title: string
   description: string
-  image?: string
+  thumbnail?: string
   duration: number
-  difficulty: 'beginner' | 'intermediate' | 'advanced'
+  level: 'beginner' | 'intermediate' | 'advanced'
   category: string
   instructor: string
+  price: number
+  tags: string[]
+  isPublished: boolean
   createdAt: string
   updatedAt: string
 }
