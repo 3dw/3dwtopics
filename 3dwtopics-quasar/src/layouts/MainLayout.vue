@@ -29,9 +29,9 @@
               <q-item-section avatar>
                 <q-icon name="account_circle" />
               </q-item-section>
-              <q-item-section>登入/註冊</q-item-section>
+              <q-item-section>登入/註冊(AtProtocol)</q-item-section>
             </q-item>
-            <q-item clickable v-ripple class="nav-item" to="/" exact>
+            <!-- <q-item clickable v-ripple class="nav-item" to="/" exact>
               <q-item-section avatar>
                 <q-icon name="home" />
               </q-item-section>
@@ -54,10 +54,10 @@
                 <q-icon name="question_answer" />
               </q-item-section>
               <q-item-section>FAQ</q-item-section>
-            </q-item>
+            </q-item> -->
           </q-list>
         </div>
-        <div class="nav-section">
+        <!-- <div class="nav-section">
           <div class="nav-title">Guides</div>
           <q-list dense>
             
@@ -86,7 +86,7 @@
               <q-item-section>PDS Self-Hosting</q-item-section>
             </q-item>
           </q-list>
-        </div>
+        </div> -->
         <!-- <div class="nav-section">
           <div class="nav-title">線上課程平台</div>
           <q-list dense>
@@ -297,10 +297,10 @@
         </div>
         <div class="nav-right">
           <!-- <q-btn flat label="SDKs" /> -->
-          <q-btn flat label="Blog" />
+          <!-- <q-btn flat label="Blog" />
           <q-btn flat label="GitHub" />
-          <q-btn flat label="English" />
-          <q-btn flat label="Atprotocol登入/註冊" />
+          <q-btn flat label="English" /> -->
+          <q-btn flat label="登入/註冊(AtProtocol)" />
         </div>
       </div>
 

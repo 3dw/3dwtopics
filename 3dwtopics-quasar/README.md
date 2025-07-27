@@ -9,6 +9,7 @@
 - 🎨 **Material Design**: 美觀且一致的使用者介面
 - 🌐 **中文介面**: 完全中文化的使用者體驗
 - 📚 **學習導向**: 專為線上課程設計的完整功能
+- 🔐 **去中心化認證**: 整合 ATProtocol DID 和 Google OAuth
 
 ## 功能特色
 
@@ -17,6 +18,7 @@
 - **社群互動**: 學習者交流和分享平台
 - **成就系統**: 激勵學習動機的成就機制
 - **響應式設計**: 支援各種裝置尺寸的最佳體驗
+- **去中心化登入**: 基於 ATProtocol 的 Google OAuth 認證系統
 
 ## 技術架構
 
@@ -25,6 +27,8 @@
 - **樣式**: SCSS + Quasar Design System
 - **語言**: TypeScript
 - **建置工具**: Vite
+- **認證系統**: ATProtocol + Google OAuth + JWT
+- **後端服務**: Cloudflare Workers + KV 存儲
 
 ## 快速開始
 
@@ -33,6 +37,17 @@
 ```bash
 npm install
 ```
+
+### 設置認證系統
+
+1. 複製環境變數文件：
+   ```bash
+   cp env.example .env
+   ```
+
+2. 設置 Google OAuth 憑證（詳見 [ATProtocol 認證說明](./ATPROTO_AUTH_README.md)）
+
+3. 設置 Cloudflare Workers（詳見 [ATProtocol 認證說明](./ATPROTO_AUTH_README.md)）
 
 ### 開發模式
 
@@ -69,11 +84,49 @@ quasar build -m capacitor -T [android|ios]
 │   ├── router/             # 路由配置
 │   ├── boot/               # 啟動檔案
 │   ├── css/                # 樣式檔案
-│   └── assets/             # 靜態資源
+│   ├── assets/             # 靜態資源
+│   └── services/           # 認證服務
+│       ├── auth.ts         # 認證服務
+│       ├── atproto.ts      # ATProtocol 服務
+│       ├── google-auth.ts  # Google OAuth 服務
+│       └── jwt.ts          # JWT 服務
+├── functions/              # Cloudflare Workers
+│   └── auth.ts            # 認證 Worker
 ├── public/                 # 公開資源
 ├── quasar.config.ts        # Quasar 配置
+├── wrangler.toml          # Cloudflare Workers 配置
 └── package.json            # 專案配置
 ```
+
+## 認證系統
+
+本專案整合了基於 ATProtocol 的去中心化認證系統：
+
+### 系統架構
+
+```
+[ 使用者點擊 Google 登入 ]
+            ↓
+[ Cloudflare Worker ]
+  - 向 Google OAuth 交換 token
+  - 取得使用者 email, name, picture 等資訊
+            ↓
+  ✅ 檢查是否已有綁定的 atproto DID
+       - 若無 → 幫他自動建立 1 個 atproto DID
+       - 若有 → 將 Google identity 綁定到現有 DID
+            ↓
+[ 回傳登入成功，並下發 token (如 JWT) ]
+```
+
+### 主要功能
+
+- 🔐 **去中心化身份**: 使用 ATProtocol DID (Decentralized Identifier)
+- 🌐 **Google OAuth 整合**: 支援 Google 登入
+- 🚀 **Serverless 架構**: 基於 Cloudflare Workers
+- 💾 **KV 存儲**: 使用 Cloudflare KV 存儲用戶資料
+- 🔑 **JWT 認證**: 安全的令牌認證機制
+
+詳細設置和使用說明請參考：[ATProtocol 認證說明](./ATPROTO_AUTH_README.md)
 
 ## 設計理念
 
@@ -84,6 +137,7 @@ quasar build -m capacitor -T [android|ios]
 3. **社群互動**: 與其他學習者交流分享學習心得
 4. **進度追蹤**: 詳細記錄學習進度和成果
 5. **多平台支援**: 在任何裝置上都能享受最佳的學習體驗
+6. **去中心化身份**: 使用 ATProtocol 保護用戶隱私和數據主權
 
 ## 主要頁面
 
@@ -92,6 +146,7 @@ quasar build -m capacitor -T [android|ios]
 - **學習路徑**: 系統化的學習規劃
 - **個人中心**: 學習進度和成就管理
 - **社群**: 學習者交流和分享
+- **認證頁面**: Google OAuth 登入和 DID 管理
 
 ## 開發指南
 
@@ -111,6 +166,12 @@ quasar build -m capacitor -T [android|ios]
 
 - 使用 Vue 3 的 Composition API
 - 對於複雜狀態考慮使用 Pinia
+
+### 認證開發
+
+- 使用 `src/services/auth.ts` 進行認證操作
+- 參考 `src/pages/AuthPage.vue` 的實現方式
+- 使用 Cloudflare Workers 處理後端邏輯
 
 ## 部署
 
@@ -133,6 +194,12 @@ quasar build -m capacitor -T android
 quasar build -m capacitor -T ios
 ```
 
+### Cloudflare Workers 部署
+
+```bash
+wrangler deploy
+```
+
 ## 貢獻指南
 
 歡迎提交 Issue 和 Pull Request 來改善這個專案！
@@ -141,8 +208,10 @@ quasar build -m capacitor -T ios
 
 1. 確保已安裝 Node.js 和 npm
 2. 安裝 Quasar CLI: `npm install -g @quasar/cli`
-3. 克隆專案並安裝依賴
-4. 執行 `quasar dev` 開始開發
+3. 安裝 Wrangler CLI: `npm install -g wrangler`
+4. 克隆專案並安裝依賴
+5. 設置環境變數和認證憑證
+6. 執行 `quasar dev` 開始開發
 
 ## 授權
 

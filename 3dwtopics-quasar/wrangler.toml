@@ -3,4 +3,22 @@ compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
 [site]
-bucket = "./dist/spa" 
+bucket = "./dist/spa"
+
+[functions]
+directory = "functions"
+
+[[kv_namespaces]]
+binding = "USERS_KV"
+id = "your-kv-namespace-id"
+preview_id = "your-preview-kv-namespace-id"
+
+[env.production]
+GOOGLE_CLIENT_ID = "your-google-client-id"
+GOOGLE_CLIENT_SECRET = "your-google-client-secret"
+JWT_SECRET = "your-jwt-secret"
+
+[env.development]
+GOOGLE_CLIENT_ID = "your-google-client-id"
+GOOGLE_CLIENT_SECRET = "your-google-client-secret"
+JWT_SECRET = "your-jwt-secret" 
