@@ -13,17 +13,7 @@
 
 ## 子專案介紹
 
-### 1. 3dwtopics-astro - 主題首頁
-
-**技術棧**: Astro + Semantic UI
-
-**功能特色**:
--  美觀的主題展示頁面
--  響應式設計
--  完全中文化介面
--  學習導向的設計
-
-**參考設計**: [topics.alearn.org.tw](https://topics.alearn.org.tw/)
+### 1. 3dwtopics-astro - 主題首頁 https://topics.alearn.org.tw
 
 **快速開始**:
 ```bash
@@ -32,18 +22,7 @@ npm install
 npm run dev
 ```
 
-### 2. 3dwtopics-quasar - 線上課程平台
-
-**技術棧**: Quasar (Vue.js 3) + TypeScript
-
-**功能特色**:
--  完整的課程管理系統
--  學習路徑規劃
--  社群互動功能
--  成就系統
--  跨平台支援 (Web/Mobile/Desktop)
-
-**參考設計**: [AT Protocol](https://atproto.com/) + [onlinecourse.alearn.org.tw](https://onlinecourse.alearn.org.tw/#/)
+### 2. 3dwtopics-quasar - 線上課程平台  https://onlinecourse.alearn.org.tw
 
 **快速開始**:
 ```bash
