@@ -7,7 +7,7 @@
           <div class="course-category">{{ course.category }}</div>
           <h1 class="course-title">{{ course.title }}</h1>
           <p class="course-subtitle">{{ course.description }}</p>
-          
+
           <div class="course-meta">
             <div class="meta-item">
               <q-icon name="schedule" size="20px" />
@@ -27,9 +27,10 @@
             </div>
           </div>
         </div>
-        
+
         <div class="course-purchase">
           <div class="purchase-card">
+            <div class="draft-badge">樣稿</div>
             <div class="price-section">
               <div class="current-price">NT$ {{ course.price }}</div>
               <div v-if="course.originalPrice" class="original-price">
@@ -39,7 +40,7 @@
                 省下 NT$ {{ course.originalPrice - course.price }}
               </div>
             </div>
-            
+
             <div class="purchase-features">
               <div class="feature-item">
                 <q-icon name="check_circle" color="positive" />
@@ -58,7 +59,7 @@
                 <span>證書完成</span>
               </div>
             </div>
-            
+
             <q-btn
               color="primary"
               size="lg"
@@ -66,7 +67,7 @@
               class="purchase-btn"
               @click="purchaseCourse"
             />
-            
+
             <div class="guarantee">
               <q-icon name="security" size="16px" />
               <span>30 天退款保證</span>
@@ -99,17 +100,17 @@
               <div class="overview-content">
                 <h3>課程簡介</h3>
                 <p>{{ course.overview }}</p>
-                
+
                 <h3>您將學到什麼</h3>
                 <ul class="learning-points">
                   <li v-for="point in course.learningPoints" :key="point">
                     {{ point }}
                   </li>
                 </ul>
-                
+
                 <h3>適合對象</h3>
                 <p>{{ course.targetAudience }}</p>
-                
+
                 <h3>課程要求</h3>
                 <p>{{ course.requirements }}</p>
               </div>
@@ -134,7 +135,7 @@
                         <span>{{ section.duration }}</span>
                       </div>
                     </div>
-                    
+
                     <div class="lesson-list">
                       <div
                         v-for="lesson in section.lessons"
@@ -164,7 +165,7 @@
                     <h3>{{ course.instructor.name }}</h3>
                     <p class="instructor-title">{{ course.instructor.title }}</p>
                     <p class="instructor-bio">{{ course.instructor.bio }}</p>
-                    
+
                     <div class="instructor-stats">
                       <div class="stat-item">
                         <span class="stat-number">{{ course.instructor.students }}</span>
@@ -202,7 +203,7 @@
                     <div class="total-reviews">{{ course.reviews }} 個評價</div>
                   </div>
                 </div>
-                
+
                 <div class="review-list">
                   <div
                     v-for="review in course.reviewList"
@@ -434,6 +435,22 @@ const purchaseCourse = () => {
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.draft-badge {
+  position: absolute;
+  top: 15px;
+  right: -30px;
+  background: #ffd700;
+  color: #000;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 40px;
+  transform: rotate(45deg);
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .price-section {
@@ -763,18 +780,18 @@ const purchaseCourse = () => {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
+
   .course-title {
     font-size: 24px;
   }
-  
+
   .course-meta {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .tab-panel {
     padding: 20px;
   }
 }
-</style> 
+</style>
